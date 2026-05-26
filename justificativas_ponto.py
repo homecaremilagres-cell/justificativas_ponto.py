@@ -10,7 +10,7 @@ st.markdown("Esqueceu de bater o ponto? Preencha os campos abaixo para enviar a 
 st.markdown("---")
 
 # Link da sua planilha
-URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1J5lpTGO37379tCtfQ9Pdkdvu3ts1gQ89RvceCdZqe4Y/edit?gid=0#gid=0"
+URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1J5lpTGO37379tCtfQ9Pdkdvu3ts1gQ89RvceCdZqe4Y/edit?usp=sharing"
 
 # Formulário
 with st.form(key="form_ponto", clear_on_submit=True):
