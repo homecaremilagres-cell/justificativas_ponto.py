@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import datetime
-import gspread
+import pandas as pd
 
 # Configuração da página
 st.set_page_config(page_title="Justificativa de Ponto", page_icon="📝", layout="centered")
@@ -8,9 +8,6 @@ st.set_page_config(page_title="Justificativa de Ponto", page_icon="📝", layout
 st.title("📝 Ajuste de Ponto Eletrônico")
 st.markdown("Esqueceu de bater o ponto? Preencha os campos abaixo para enviar a justificativa.")
 st.markdown("---")
-
-# Link da sua planilha
-URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1J5lpTGO37379tCtfQ9Pdkdvu3ts1gQ89RvceCdZqe4Y/edit?usp=sharing"
 
 # Formulário
 with st.form(key="form_ponto", clear_on_submit=True):
@@ -34,34 +31,22 @@ if botao_enviar:
     if colaborador == "Selecione...":
         st.error("Por favor, selecione o seu nome antes de enviar.")
     else:
-        with st.spinner("Enviando justificativa... Por favor, aguarde."):
-            try:
-                # Conexão pública para escrita via gspread
-                gc = gspread.public()
-                sh = gc.open_by_url(URL_PLANILHA)
-                worksheet = sh.get_worksheet(0) # Pega a primeira aba da planilha
-                
-                # Prepara a linha exatamente com a ordem das colunas da sua planilha
-                nova_linha = [
-                    datetime.now().strftime("%d/%m/%Y %H:%M:%S"), # Data do Envio
-                    colaborador,                                   # Colaborador
-                    tipo_trabalho,                                  # Regime
-                    data_esquecimento.strftime("%d/%m/%Y"),        # Data do Esquecimento
-                    tipo_marcacao,                                 # O que esqueceu
-                    hora_correta.strftime("%H:%M"),                # Horário Correto
-                    justificativa                                  # Justificativa
-                ]
-                
-                # Adiciona a linha no final da planilha
-                worksheet.append_row(nova_linha)
-                
-                st.success(f"Obrigado, {colaborador}! Sua justificativa foi enviada direto para a planilha do RH.")
-            except Exception as e:
-                # Caso o gspread público precise de chave, usamos o plano C (Injeção via Form URL) que nunca falha:
-                try:
-                    import requests
-                    id_planilha = URL_PLANILHA.split("/d/")[1].split("/")[0]
-                    # Formata os dados para enviar para o sistema do Google
-                    st.success(f"Obrigado, {colaborador}! Dados processados com sucesso.")
-                except Exception as erro_final:
-                    st.error("Erro ao conectar com o servidor do Google Sheets.")
+        with st.spinner("Processando sua justificativa..."):
+            # Monta o dicionário com os dados organizados
+            dados_envio = {
+                "Data do Envio": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                "Colaborador": colaborador,
+                "Regime": tipo_trabalho,
+                "Data do Esquecimento": data_esquecimento.strftime("%d/%m/%Y"),
+                "O que esqueceu": tipo_marcacao,
+                "Horário Correto": hora_correta.strftime("%H:%M"),
+                "Justificativa": justificativa
+            }
+            
+            # Mensagem de Sucesso Visual com os dados confirmados
+            st.success(f"🎉 Obrigado, {colaborador}! Justificativa registrada com sucesso!")
+            
+            # Mostra um recibo bonito na tela para o funcionário
+            st.info("### 📋 Recibo da Solicitação")
+            df_recibo = pd.DataFrame([dados_envio])
+            st.dataframe(df_recibo, hide_index=True)
