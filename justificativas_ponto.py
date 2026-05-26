@@ -14,7 +14,7 @@ st.markdown("---")
 URL_PLANILHA = "https://docs.google.com/spreadsheets/d/1J5lpTGO37379tCtfQ9Pdkdvu3ts1gQ89RvceCdZqe4Y/edit?usp=sharing"
 
 # Criando a conexão com o Google Sheets de forma direta
-conn = st.connection("gsheets", type=GSheetsConnection, spreadsheet=URL_PLANILHA)
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Formulário
 with st.form(key="form_ponto", clear_on_submit=True):
