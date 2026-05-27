@@ -24,8 +24,8 @@ with st.form(key="form_ponto", clear_on_submit=True):
     with col1:
         tipo_marcacao = st.selectbox("Período:", ["Entrada", "Saída", "Almoço (Ida)", "Almoço (Volta)"])
     with col2:
-        # Mudamos o nome aqui para garantir que o Streamlit salve o valor digitado nesta variável:
-        campo_hora = st.time_input("Horário correto da marcação:", value=datetime.now().time())
+        # Usamos o parâmetro key para fixar o valor no estado do formulário
+        st.time_input("Horário correto da marcação:", value=datetime.now().time(), key="valor_hora_digitado")
 
     justificativa = st.text_area("Motivo do esquecimento / Observações:", placeholder="Ex: Cliente externo...")
 
@@ -37,14 +37,17 @@ if botao_enviar:
         st.error("Por favor, selecione o seu nome antes de enviar.")
     else:
         with st.spinner("Enviando justificativa... Por favor, aguarde."):
-            # Forçamos o payload a buscar o 'campo_hora' que veio da tela!
+            
+            # Resgatamos a hora diretamente do estado do formulário antes que ele limpe a tela
+            hora_selecionada = st.session_state.valor_hora_digitado
+            
             payload = {
                 "data_envio": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                 "colaborador": colaborador,
                 "regime": tipo_trabalho,
                 "data_esquecimento": data_esquecimento.strftime("%d/%m/%Y"),
                 "tipo_marcacao": tipo_marcacao,
-                "hora_correta": campo_hora.strftime("%H:%M"),  # 👈 Aqui estava o segredo!
+                "hora_correta": hora_selecionada.strftime("%H:%M"),  # 👈 Agora o Python lê o valor real alterado
                 "justificativa": justificativa
             }
             
