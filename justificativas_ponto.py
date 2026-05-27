@@ -36,14 +36,14 @@ if botao_enviar:
         st.error("Por favor, selecione o seu nome antes de enviar.")
     else:
         with st.spinner("Enviando justificativa... Por favor, aguarde."):
-            # Organiza os dados no formato que o seu Apps Script espera receber
+           # Organiza os dados no formato que o seu Apps Script espera receber
             payload = {
                 "data_envio": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
                 "colaborador": colaborador,
                 "regime": tipo_trabalho,
                 "data_esquecimento": data_esquecimento.strftime("%d/%m/%Y"),
                 "tipo_marcacao": tipo_marcacao,
-                "hora_correta": hora_correta.strftime("%H:%M"),
+                "hora_correta": hora_correta.strftime("%H:%M"),  # 👈 GARANTA QUE ESTÁ EXATAMENTE ASSIM!
                 "justificativa": justificativa
             }
             
