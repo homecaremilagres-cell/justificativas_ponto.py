@@ -15,7 +15,7 @@ URL_WEBAPP = "https://script.google.com/macros/s/AKfycbzl_CLpkDt0j-HNSpp5XEpVPDz
 
 # Formulário na tela
 with st.form(key="form_ponto", clear_on_submit=True):
-    colaborador = st.selectbox("Selecione seu nome:", ["Selecione...", "Maria Eduarda", "Marya Eduarda", "Liliane Ferreira", "Arthur Gonçalves de Siqueira", "João Gabriel da Silva"])
+    colaborador = st.selectbox("Selecione seu nome:", ["Selecione...", "Arthur Gonçalves de Siqueira", "João Gabriel da Silva", "Liliane Ferreira", "Maria Eduarda", "Marya Eduarda"])
     tipo_trabalho = st.radio("Regime de trabalho no dia:", ["Interno", "Externo"], horizontal=True)
     data_esquecimento = st.date_input("Data do ponto esquecido:", datetime.today())
     
